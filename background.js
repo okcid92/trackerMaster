@@ -301,6 +301,9 @@ async function refreshBadgeForCurrentTab() {
 }
 
 async function getSnapshot() {
+  // Keep popup live section accurate even if no tab event fired recently.
+  await syncWithCurrentActiveTab();
+
   const [totalsByDay, active, settings] = await Promise.all([
     getTotalsByDay(),
     getActiveSession(),
