@@ -330,6 +330,14 @@ th:nth-child(3) {
   border-color: rgba(180, 35, 24, 0.35);
 }
 
+.btn-dashboard {
+  margin-top: 8px;
+  width: 100%;
+  background: #143f36;
+  border-color: #143f36;
+  color: #ecfdf5;
+}
+
 @keyframes reveal {
   from {
     opacity: 0;

@@ -442,6 +442,12 @@ function bindEvents() {
     await chrome.tabs.create({ url: chrome.runtime.getURL("import.html") });
   });
 
+  document
+    .getElementById("openDashboard")
+    .addEventListener("click", async () => {
+      await chrome.tabs.create({ url: chrome.runtime.getURL("dashboard.html") });
+    });
+
   document.getElementById("clearAll").addEventListener("click", async () => {
     const confirmed = confirm("Supprimer toutes les donnees de tracking ?");
     if (!confirmed) {
