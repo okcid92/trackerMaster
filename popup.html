@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Web Focus Tracker</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+
+<body>
+  <main class="app">
+    <header class="hero">
+      <p class="kicker">Web Focus Tracker</p>
+      <h1>Ton temps de navigation, clairement</h1>
+      <div class="live-pill">
+        <span id="liveSite">Aucun site actif</span>
+        <strong id="liveTime">00:00:00</strong>
+      </div>
+    </header>
+
+    <section class="panel tabs-panel">
+      <div class="tabs" role="tablist" aria-label="Periodes">
+        <button class="tab is-active" id="tab-day" data-range="day" role="tab">Jour</button>
+        <button class="tab" id="tab-average" data-range="average" role="tab">Moyenne</button>
+        <button class="tab" id="tab-alltime" data-range="alltime" role="tab">All-time</button>
+      </div>
+
+      <div class="day-nav" id="dayNav">
+        <button id="prevDay" class="ghost" title="Jour precedent">◀</button>
+        <span id="currentDay">-</span>
+        <button id="nextDay" class="ghost" title="Jour suivant">▶</button>
+      </div>
+    </section>
+
+    <section class="panel chart-panel">
+      <div class="ring-wrap">
+        <div id="ringChart" class="ring"></div>
+        <div class="ring-center">
+          <span class="ring-label" id="ringLabel">Jour</span>
+          <strong id="rangeTotal">00:00:00</strong>
+        </div>
+      </div>
+      <p class="muted" id="rangeSubtitle">Distribution des domaines</p>
+    </section>
+
+    <section class="panel table-panel">
+      <table>
+        <thead>
+          <tr>
+            <th>Site</th>
+            <th>%</th>
+            <th>Temps</th>
+          </tr>
+        </thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </section>
+
+    <section class="panel actions-panel">
+      <div class="settings-grid">
+        <label>
+          <span>Idle stop (sec)</span>
+          <input id="idleSeconds" type="range" min="30" max="1800" step="30" />
+          <strong id="idleSecondsValue">60</strong>
+        </label>
+        <label class="checkbox-line">
+          <input id="showBadge" type="checkbox" />
+          <span>Afficher le badge sur l'icone</span>
+        </label>
+      </div>
+
+      <div class="buttons-row">
+        <button id="exportCsv" class="btn">Exporter CSV</button>
+        <button id="clearAll" class="btn danger">Effacer les donnees</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="popup.js"></script>
+</body>
+
+</html>
