@@ -428,7 +428,11 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
 
         await setTotalsByDay(nextTotals);
         await refreshBadgeForCurrentTab();
-        sendResponse({ ok: true, importedDays: Object.keys(imported).length, mode });
+        sendResponse({
+          ok: true,
+          importedDays: Object.keys(imported).length,
+          mode,
+        });
       })
       .catch((error) => sendResponse({ ok: false, error: String(error) }));
 

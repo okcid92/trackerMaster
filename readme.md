@@ -43,15 +43,17 @@ Extension Chrome de suivi du temps passe sur les sites internet, inspiree des lo
    - seuil idle (secondes),
    - affichage du badge.
 5. Utiliser:
-  - `Exporter CSV` pour sauvegarder les donnees,
-  - `Importer CSV` pour recharger des donnees,
-  - `Effacer les donnees` pour reset total.
+
+- `Exporter CSV` pour sauvegarder les donnees,
+- `Importer CSV` pour ouvrir une page dediee d'import,
+- `Effacer les donnees` pour reset total.
 
 ## Format CSV
 
 - En-tete: `Domain,YYYY-MM-DD,YYYY-MM-DD,...`
 - Une ligne par domaine, avec le nombre de secondes par jour.
 - A l'import:
+  - L'import se fait dans un onglet dedie (evite la fermeture du popup Chrome pendant le choix du fichier).
   - `OK` dans la confirmation = fusion avec les donnees existantes.
   - `Annuler` = remplacement complet des donnees existantes.
 

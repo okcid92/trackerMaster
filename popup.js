@@ -332,12 +332,17 @@ function downloadCsv(filename, content) {
 function buildCsv(totalsByDay) {
   const rawKeys = getSortedDayKeys(totalsByDay);
   const dayKeys = rawKeys.length
-    ? daySequence(rawKeys[0], state.snapshot?.todayKey || rawKeys[rawKeys.length - 1])
+    ? daySequence(
+        rawKeys[0],
+        state.snapshot?.todayKey || rawKeys[rawKeys.length - 1],
+      )
     : [state.snapshot?.todayKey || dateToDayKey(new Date())];
   const domainSet = new Set();
 
   for (const dayKey of Object.keys(totalsByDay || {})) {
-    for (const domain of Object.keys((totalsByDay && totalsByDay[dayKey]) || {})) {
+    for (const domain of Object.keys(
+      (totalsByDay && totalsByDay[dayKey]) || {},
+    )) {
       domainSet.add(domain);
     }
   }
@@ -355,7 +360,6 @@ function buildCsv(totalsByDay) {
 
   return rows.join("\n");
 }
-
 
 function bindEvents() {
   document.querySelectorAll(".tab").forEach((tab) => {
