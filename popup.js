@@ -445,7 +445,9 @@ function bindEvents() {
   document
     .getElementById("openDashboard")
     .addEventListener("click", async () => {
-      await chrome.tabs.create({ url: chrome.runtime.getURL("dashboard.html") });
+      await chrome.tabs.create({
+        url: chrome.runtime.getURL("dashboard.html"),
+      });
     });
 
   document.getElementById("clearAll").addEventListener("click", async () => {

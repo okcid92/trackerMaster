@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard - Web Focus Tracker</title>
+  <link rel="stylesheet" href="dashboard.css" />
+</head>
+
+<body>
+  <main class="page">
+    <header class="hero">
+      <div>
+        <p class="kicker">Web Focus Tracker</p>
+        <h1>Dashboard usage</h1>
+        <p class="muted" id="periodLabel">-</p>
+      </div>
+      <button id="refreshBtn" class="btn">Rafraichir</button>
+    </header>
+
+    <section class="kpis" id="kpis"></section>
+
+    <section class="panel controls">
+      <div class="control-item">
+        <label for="siteSearch">Recherche site</label>
+        <input id="siteSearch" type="text" placeholder="ex: youtube, github..." />
+      </div>
+      <div class="control-item">
+        <label for="daySelect">Jour</label>
+        <select id="daySelect"></select>
+      </div>
+      <div class="control-item">
+        <label for="heatmapWindow">Fenetre heatmap</label>
+        <select id="heatmapWindow">
+          <option value="14">14 jours</option>
+          <option value="30" selected>30 jours</option>
+          <option value="60">60 jours</option>
+          <option value="120">120 jours</option>
+        </select>
+      </div>
+    </section>
+
+    <section class="layout-two">
+      <article class="panel">
+        <h2>Sites (all-time)</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Site</th>
+                <th>Total</th>
+                <th>Jours actifs</th>
+                <th>Moy./jour</th>
+                <th>Best day</th>
+              </tr>
+            </thead>
+            <tbody id="siteRows"></tbody>
+          </table>
+        </div>
+      </article>
+
+      <article class="panel" id="siteDetailPanel">
+        <h2>Detail site</h2>
+        <div id="siteDetail"></div>
+      </article>
+    </section>
+
+    <section class="layout-two">
+      <article class="panel">
+        <h2>Detail du jour selectionne</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Site</th>
+                <th>Temps</th>
+                <th>Part</th>
+              </tr>
+            </thead>
+            <tbody id="dayRows"></tbody>
+          </table>
+        </div>
+      </article>
+
+      <article class="panel">
+        <h2>Top jours d'activite</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Jour</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody id="topDayRows"></tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+
+    <section class="panel">
+      <h2>Matrice sites x jours</h2>
+      <p class="muted">Top 12 sites sur la fenetre selectionnee.</p>
+      <div id="heatmap" class="heatmap"></div>
+    </section>
+  </main>
+
+  <script src="dashboard.js"></script>
+</body>
+
+</html>

@@ -12,6 +12,11 @@ Extension Chrome de suivi du temps passe sur les sites internet, inspiree des lo
   - `Jour`
   - `Moyenne` (moyenne journaliere depuis le debut)
   - `All-time`
+- Dashboard complet dans un onglet dedie:
+  - KPIs globaux
+  - detail par site et par jour
+  - top jours d'activite
+  - matrice sites x jours
 - Donut de repartition du temps par domaine.
 - Tableau domaines + pourcentage + duree.
 - Navigation entre jours dans la vue `Jour`.
@@ -46,7 +51,8 @@ Extension Chrome de suivi du temps passe sur les sites internet, inspiree des lo
 
 - `Exporter CSV` pour sauvegarder les donnees,
 - `Importer CSV` pour ouvrir une page dediee d'import,
-- `Effacer les donnees` pour reset total.
+- `Effacer les donnees` pour reset total,
+- `Ouvrir Dashboard complet` pour l'analyse avancee.
 
 ## Format CSV
 
