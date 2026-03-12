@@ -1,39 +1,50 @@
-# Extension Chrome - Time Tracker
+# Extension Chrome - Web Focus Tracker
 
-Cette extension Chrome suit le temps passe sur les sites web (par domaine) et affiche les stats du jour dans un popup.
+Extension Chrome de suivi du temps passe sur les sites internet, inspiree des logiques avancees de type Webtime Tracker, avec un code original et simplifie.
 
-## Fonctions
+## Fonctions principales
 
-- Suivi automatique du site actif.
-- Sauvegarde locale du temps passe par domaine.
-- Affichage en temps reel du site en cours.
-- Tableau des temps du jour (classe par temps decroissant).
+- Tracking automatique du site actif (par domaine).
+- Gestion de sessions robuste avec decoupage a minuit.
+- Pause automatique du tracking en etat idle / locked.
+- Badge optionnel sur l'icone de l'extension.
+- Vue popup avec 3 periodes:
+  - `Jour`
+  - `Moyenne` (moyenne journaliere depuis le debut)
+  - `All-time`
+- Donut de repartition du temps par domaine.
+- Tableau domaines + pourcentage + duree.
+- Navigation entre jours dans la vue `Jour`.
+- Export des donnees au format CSV.
+- Suppression complete des donnees de tracking.
 
-## Fichiers
+## Architecture
 
-- `manifest.json` : configuration de l'extension (Manifest V3).
-- `background.js` : logique de tracking (service worker).
-- `popup.html` : interface popup.
-- `popup.css` : styles popup.
-- `popup.js` : affichage des stats et du timer live.
+- `manifest.json` : declaration Manifest V3 et permissions.
+- `background.js` : moteur de tracking, sessions, idle, badge, API messages popup.
+- `popup.html` : interface utilisateur.
+- `popup.css` : design et animations de l'interface popup.
+- `popup.js` : calcul des stats, rendu graphique/tableau, interactions utilisateur.
 
 ## Installation (mode developpeur)
 
-1. Ouvrir `chrome://extensions` dans Chrome.
-2. Activer le mode developpeur (en haut a droite).
-3. Cliquer sur `Load unpacked` / `Charger l'extension non empaquetee`.
-4. Selectionner le dossier du projet.
+1. Ouvrir `chrome://extensions`.
+2. Activer `Mode developpeur`.
+3. Cliquer `Load unpacked` / `Charger l'extension non empaquetee`.
+4. Choisir ce dossier.
 
 ## Utilisation
 
-1. Naviguer sur des sites web.
-2. Cliquer sur l'icone de l'extension.
-3. Voir:
-   - le site actuellement tracke,
-   - le temps en cours,
-   - le total du jour par domaine.
+1. Naviguer normalement sur le web.
+2. Ouvrir le popup de l'extension.
+3. Changer de vue (`Jour`, `Moyenne`, `All-time`) pour analyser le temps passe.
+4. Ajuster les reglages:
+   - seuil idle (secondes),
+   - affichage du badge.
+5. Utiliser `Exporter CSV` ou `Effacer les donnees` si besoin.
 
-## Notes
+## Donnees et vie privee
 
-- Le tracking concerne uniquement les URLs `http` et `https`.
-- Les donnees sont stockees en local avec `chrome.storage.local`.
+- Toutes les donnees restent en local (`chrome.storage.local`).
+- Aucune synchronisation distante n'est implementee.
+- Le tracking cible uniquement les URLs `http://` et `https://`.

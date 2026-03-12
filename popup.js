@@ -56,7 +56,9 @@ function getDaysSpan(dayKeys, fallbackDay) {
   const end = dayKeys[dayKeys.length - 1];
   const days = Math.max(
     1,
-    Math.floor((dayKeyToDate(end).getTime() - dayKeyToDate(start).getTime()) / 86400000) + 1
+    Math.floor(
+      (dayKeyToDate(end).getTime() - dayKeyToDate(start).getTime()) / 86400000,
+    ) + 1,
   );
 
   return { start, end, count: days };
@@ -209,7 +211,10 @@ function renderLive(snapshot) {
 
   liveSite.textContent = snapshot.active.domain;
   liveTime.textContent = formatDuration(
-    Math.max(0, Math.floor((snapshot.nowTs - snapshot.active.startedAt) / 1000))
+    Math.max(
+      0,
+      Math.floor((snapshot.nowTs - snapshot.active.startedAt) / 1000),
+    ),
   );
 }
 
@@ -223,7 +228,8 @@ function renderDayNavigation(snapshot) {
 
   const allKeys = getSortedDayKeys(snapshot.totalsByDay || {});
   const currentDay = state.selectedDayKey || snapshot.todayKey;
-  document.getElementById("currentDay").textContent = formatDayLabel(currentDay);
+  document.getElementById("currentDay").textContent =
+    formatDayLabel(currentDay);
 
   const idx = allKeys.indexOf(currentDay);
   const hasPrev = idx > 0;
@@ -234,12 +240,18 @@ function renderDayNavigation(snapshot) {
 }
 
 function renderRange(snapshot) {
-  const rangeData = collectRangeData(snapshot, state.selectedRange, state.selectedDayKey);
+  const rangeData = collectRangeData(
+    snapshot,
+    state.selectedRange,
+    state.selectedDayKey,
+  );
   const ring = document.getElementById("ringChart");
 
   ring.style.background = buildConicGradient(rangeData.domains);
   document.getElementById("ringLabel").textContent = rangeData.label;
-  document.getElementById("rangeTotal").textContent = formatDuration(rangeData.totalSeconds);
+  document.getElementById("rangeTotal").textContent = formatDuration(
+    rangeData.totalSeconds,
+  );
   document.getElementById("rangeSubtitle").textContent = rangeData.subtitle;
 
   renderTable(rangeData.domains);
@@ -247,7 +259,10 @@ function renderRange(snapshot) {
 
 function renderTabs() {
   document.querySelectorAll(".tab").forEach((tab) => {
-    tab.classList.toggle("is-active", tab.dataset.range === state.selectedRange);
+    tab.classList.toggle(
+      "is-active",
+      tab.dataset.range === state.selectedRange,
+    );
   });
 }
 
@@ -365,13 +380,15 @@ function bindEvents() {
     await refreshUI();
   });
 
-  document.getElementById("showBadge").addEventListener("change", async (event) => {
-    await chrome.runtime.sendMessage({
-      type: "setSettings",
-      payload: { showBadge: Boolean(event.target.checked) },
+  document
+    .getElementById("showBadge")
+    .addEventListener("change", async (event) => {
+      await chrome.runtime.sendMessage({
+        type: "setSettings",
+        payload: { showBadge: Boolean(event.target.checked) },
+      });
+      await refreshUI();
     });
-    await refreshUI();
-  });
 
   document.getElementById("exportCsv").addEventListener("click", () => {
     const csv = buildCsv(state.snapshot.totalsByDay || {});
