@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Importer CSV - Web Focus Tracker</title>
+  <link rel="stylesheet" href="import.css" />
+</head>
+
+<body>
+  <main class="page">
+    <h1>Importer un CSV</h1>
+    <p class="muted">
+      Format attendu: <code>Domain,YYYY-MM-DD,YYYY-MM-DD,...</code>
+    </p>
+
+    <section class="card">
+      <label for="csvFile" class="label">Fichier CSV</label>
+      <input id="csvFile" type="file" accept=".csv,text/csv" />
+
+      <label for="importMode" class="label">Mode d'import</label>
+      <select id="importMode">
+        <option value="merge">Fusionner avec les donnees existantes</option>
+        <option value="replace">Remplacer toutes les donnees</option>
+      </select>
+
+      <button id="runImport" class="btn">Lancer l'import</button>
+      <p id="status" class="status">En attente d'un fichier...</p>
+    </section>
+  </main>
+
+  <script src="import.js"></script>
+</body>
+
+</html>

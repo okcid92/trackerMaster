@@ -356,95 +356,6 @@ function buildCsv(totalsByDay) {
   return rows.join("\n");
 }
 
-function normalizeCell(cell) {
-  return cell.trim().replace(/^"|"$/g, "");
-}
-
-function parseCsvLine(line) {
-  const cells = [];
-  let current = "";
-  let inQuotes = false;
-
-  for (let i = 0; i < line.length; i += 1) {
-    const ch = line[i];
-
-    if (ch === '"') {
-      inQuotes = !inQuotes;
-      continue;
-    }
-
-    if (ch === "," && !inQuotes) {
-      cells.push(normalizeCell(current));
-      current = "";
-      continue;
-    }
-
-    current += ch;
-  }
-
-  cells.push(normalizeCell(current));
-  return cells;
-}
-
-function parseImportedCsv(csvText) {
-  const lines = csvText
-    .replace(/^\uFEFF/, "")
-    .split(/\r?\n/)
-    .map((line) => line.trim())
-    .filter(Boolean);
-
-  if (!lines.length) {
-    throw new Error("CSV vide");
-  }
-
-  const header = parseCsvLine(lines[0]);
-  if (!header.length || header[0].toLowerCase() !== "domain") {
-    throw new Error("Le CSV doit commencer par une colonne 'Domain'");
-  }
-
-  const dayKeys = header.slice(1);
-  if (!dayKeys.length) {
-    throw new Error("Aucune colonne date detectee");
-  }
-
-  dayKeys.forEach((dayKey) => {
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(dayKey)) {
-      throw new Error(`Date invalide dans le CSV: ${dayKey}`);
-    }
-  });
-
-  const totalsByDay = {};
-
-  for (let i = 1; i < lines.length; i += 1) {
-    const row = parseCsvLine(lines[i]);
-    if (!row.length) {
-      continue;
-    }
-
-    const domain = row[0];
-    if (!domain) {
-      continue;
-    }
-
-    for (let col = 1; col <= dayKeys.length; col += 1) {
-      const dayKey = dayKeys[col - 1];
-      const raw = row[col] || "0";
-      const seconds = Math.max(0, Math.floor(Number(raw) || 0));
-      if (seconds <= 0) {
-        continue;
-      }
-
-      if (!totalsByDay[dayKey]) {
-        totalsByDay[dayKey] = {};
-      }
-
-      totalsByDay[dayKey][domain] =
-        (totalsByDay[dayKey][domain] || 0) + seconds;
-    }
-  }
-
-  return totalsByDay;
-}
 
 function bindEvents() {
   document.querySelectorAll(".tab").forEach((tab) => {
@@ -502,44 +413,8 @@ function bindEvents() {
     downloadCsv(`web-focus-tracker-${day}.csv`, csv);
   });
 
-  const csvFileInput = document.getElementById("csvFileInput");
-
-  document.getElementById("importCsv").addEventListener("click", () => {
-    csvFileInput.value = "";
-    csvFileInput.click();
-  });
-
-  csvFileInput.addEventListener("change", async () => {
-    const file = csvFileInput.files?.[0];
-    if (!file) {
-      return;
-    }
-
-    try {
-      const content = await file.text();
-      const importedTotals = parseImportedCsv(content);
-      const mode = confirm(
-        "OK = fusionner avec les donnees existantes, Annuler = remplacer toutes les donnees"
-      )
-        ? "merge"
-        : "replace";
-
-      const response = await chrome.runtime.sendMessage({
-        type: "importTotalsByDay",
-        payload: importedTotals,
-        mode,
-      });
-
-      if (!response?.ok) {
-        throw new Error(response?.error || "Import impossible");
-      }
-
-      state.selectedDayKey = null;
-      await refreshUI();
-      alert("Import CSV termine");
-    } catch (error) {
-      alert(`Erreur import CSV: ${error.message || String(error)}`);
-    }
+  document.getElementById("importCsv").addEventListener("click", async () => {
+    await chrome.tabs.create({ url: chrome.runtime.getURL("import.html") });
   });
 
   document.getElementById("clearAll").addEventListener("click", async () => {
