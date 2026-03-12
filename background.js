@@ -11,7 +11,7 @@ const SYNC_STATE_KEY = "syncState";
 const SYNC_ALARM = "cloud-sync";
 
 const SYNC_INTERVAL_MINUTES = 5;
-const FIREBASE_PROJECT_ID = "YOUR_FIREBASE_PROJECT_ID";
+const FIREBASE_PROJECT_ID = "trackermaster-9267";
 
 const DEFAULT_SETTINGS = {
   idleSeconds: 60,

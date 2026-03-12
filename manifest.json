@@ -11,7 +11,7 @@
     "https://firestore.googleapis.com/*"
   ],
   "oauth2": {
-    "client_id": "YOUR_GOOGLE_OAUTH_CLIENT_ID.apps.googleusercontent.com",
+    "client_id": "47184503589-72sa3gsmjv1e11f2kn0528obe9htalmk.apps.googleusercontent.com",
     "scopes": [
       "openid",
       "email",
