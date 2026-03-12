@@ -16,6 +16,7 @@ Extension Chrome de suivi du temps passe sur les sites internet, inspiree des lo
 - Tableau domaines + pourcentage + duree.
 - Navigation entre jours dans la vue `Jour`.
 - Export des donnees au format CSV.
+- Import des donnees depuis un CSV exporte (format `Domain,YYYY-MM-DD,...`).
 - Suppression complete des donnees de tracking.
 
 ## Architecture
@@ -41,7 +42,18 @@ Extension Chrome de suivi du temps passe sur les sites internet, inspiree des lo
 4. Ajuster les reglages:
    - seuil idle (secondes),
    - affichage du badge.
-5. Utiliser `Exporter CSV` ou `Effacer les donnees` si besoin.
+5. Utiliser:
+  - `Exporter CSV` pour sauvegarder les donnees,
+  - `Importer CSV` pour recharger des donnees,
+  - `Effacer les donnees` pour reset total.
+
+## Format CSV
+
+- En-tete: `Domain,YYYY-MM-DD,YYYY-MM-DD,...`
+- Une ligne par domaine, avec le nombre de secondes par jour.
+- A l'import:
+  - `OK` dans la confirmation = fusion avec les donnees existantes.
+  - `Annuler` = remplacement complet des donnees existantes.
 
 ## Donnees et vie privee
 

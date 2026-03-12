@@ -105,6 +105,59 @@ async function setTotalsByDay(totalsByDay) {
   await chrome.storage.local.set({ [TOTALS_BY_DAY_KEY]: totalsByDay });
 }
 
+function sanitizeTotalsByDay(candidate) {
+  const sanitized = {};
+  if (!candidate || typeof candidate !== "object") {
+    return sanitized;
+  }
+
+  for (const [dayKey, domains] of Object.entries(candidate)) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(dayKey)) {
+      continue;
+    }
+
+    if (!domains || typeof domains !== "object") {
+      continue;
+    }
+
+    for (const [domain, rawSeconds] of Object.entries(domains)) {
+      if (!domain || typeof domain !== "string") {
+        continue;
+      }
+
+      const seconds = Math.max(0, Math.floor(Number(rawSeconds) || 0));
+      if (seconds <= 0) {
+        continue;
+      }
+
+      if (!sanitized[dayKey]) {
+        sanitized[dayKey] = {};
+      }
+
+      sanitized[dayKey][domain] = seconds;
+    }
+  }
+
+  return sanitized;
+}
+
+function mergeTotalsByDay(base, incoming) {
+  const merged = { ...(base || {}) };
+
+  for (const [dayKey, domains] of Object.entries(incoming || {})) {
+    if (!merged[dayKey]) {
+      merged[dayKey] = {};
+    }
+
+    for (const [domain, seconds] of Object.entries(domains)) {
+      const current = merged[dayKey][domain] || 0;
+      merged[dayKey][domain] = current + seconds;
+    }
+  }
+
+  return merged;
+}
+
 function addSecondsInPlace(totalsByDay, dayKey, domain, seconds) {
   if (!totalsByDay[dayKey]) {
     totalsByDay[dayKey] = {};
@@ -360,6 +413,25 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
         sendResponse({ ok: true });
       })
       .catch((error) => sendResponse({ ok: false, error: String(error) }));
+    return true;
+  }
+
+  if (message?.type === "importTotalsByDay") {
+    const mode = message?.mode === "replace" ? "replace" : "merge";
+    const imported = sanitizeTotalsByDay(message?.payload || {});
+
+    closeCurrentSession("import-csv")
+      .then(async () => {
+        const current = await getTotalsByDay();
+        const nextTotals =
+          mode === "replace" ? imported : mergeTotalsByDay(current, imported);
+
+        await setTotalsByDay(nextTotals);
+        await refreshBadgeForCurrentTab();
+        sendResponse({ ok: true, importedDays: Object.keys(imported).length, mode });
+      })
+      .catch((error) => sendResponse({ ok: false, error: String(error) }));
+
     return true;
   }
 

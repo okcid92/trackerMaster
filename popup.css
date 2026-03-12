@@ -284,7 +284,7 @@ th:nth-child(3) {
 .buttons-row {
   margin-top: 10px;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
   gap: 8px;
 }
 
