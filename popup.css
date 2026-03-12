@@ -279,6 +279,47 @@ th:nth-child(3) {
   padding: 10px;
 }
 
+.cloud-box {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 8px;
+  margin-bottom: 8px;
+  background: #f8fcf8;
+}
+
+.cloud-user {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.cloud-status {
+  margin: 4px 0 8px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.cloud-actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.device-row {
+  margin-top: 6px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 6px;
+}
+
+#deviceNameInput {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 6px 8px;
+  font: inherit;
+}
+
 .settings-grid {
   display: grid;
   gap: 8px;

@@ -3,8 +3,22 @@
   "name": "Web Focus Tracker",
   "version": "2.0.0",
   "description": "Track time spent on websites with day, average and all-time insights.",
-  "permissions": ["tabs", "storage", "alarms", "idle"],
-  "host_permissions": ["http://*/*", "https://*/*"],
+  "permissions": ["tabs", "storage", "alarms", "idle", "identity"],
+  "host_permissions": [
+    "http://*/*",
+    "https://*/*",
+    "https://www.googleapis.com/*",
+    "https://firestore.googleapis.com/*"
+  ],
+  "oauth2": {
+    "client_id": "YOUR_GOOGLE_OAUTH_CLIENT_ID.apps.googleusercontent.com",
+    "scopes": [
+      "openid",
+      "email",
+      "profile",
+      "https://www.googleapis.com/auth/datastore"
+    ]
+  },
   "background": {
     "service_worker": "background.js"
   },

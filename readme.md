@@ -23,6 +23,7 @@ Extension Chrome de suivi du temps passe sur les sites internet, inspiree des lo
 - Export des donnees au format CSV.
 - Import des donnees depuis un CSV exporte (format `Domain,YYYY-MM-DD,...`).
 - Suppression complete des donnees de tracking.
+- Sync cloud Firebase (auth Google + multi-appareils).
 
 ## Architecture
 
@@ -31,6 +32,45 @@ Extension Chrome de suivi du temps passe sur les sites internet, inspiree des lo
 - `popup.html` : interface utilisateur.
 - `popup.css` : design et animations de l'interface popup.
 - `popup.js` : calcul des stats, rendu graphique/tableau, interactions utilisateur.
+
+## Sync Cloud Firebase
+
+L'extension utilise un mode hybride:
+
+- ecriture locale immediate (`chrome.storage.local`) pour les performances,
+- synchronisation cloud incremental toutes les 5 minutes.
+
+### Configuration requise
+
+1. Dans `manifest.json`:
+   - remplacer `oauth2.client_id` par ton vrai Client ID OAuth Google.
+2. Dans `background.js`:
+   - remplacer `FIREBASE_PROJECT_ID = "YOUR_FIREBASE_PROJECT_ID"`.
+3. Configurer Firestore et OAuth consent dans Google Cloud/Firebase.
+
+### Structure Firestore proposee
+
+Collection racine par utilisateur, puis sous-collection par appareil:
+
+- `users/{uid}`
+- `users/{uid}/devices/{deviceId}`
+  - `deviceName`, `platform`, `lastSeenAt`, `extension`, etc.
+- `users/{uid}/devices/{deviceId}/days/{YYYY-MM-DD}`
+  - `dayKey`
+  - `totalSeconds`
+  - `domains` (map `domain -> seconds`)
+  - `updatedAt`
+
+Cette structure separe proprement:
+
+- les donnees par utilisateur,
+- puis par appareil,
+- puis par jour.
+
+### Appareil (multi-device)
+
+- Au premier login Google, l'extension peut demander un nom d'appareil (ex: `Laptop Alou`).
+- Le nom est modifiable dans le popup.
 
 ## Installation (mode developpeur)
 

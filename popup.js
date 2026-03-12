@@ -230,6 +230,11 @@ function renderLive(snapshot) {
   const liveTime = document.getElementById("liveTime");
   const liveFavicon = document.getElementById("liveFavicon");
 
+  // Live header can be hidden/removed depending on popup layout variant.
+  if (!liveSite || !liveTime || !liveFavicon) {
+    return;
+  }
+
   if (!snapshot.active) {
     liveSite.textContent = "Aucun site actif";
     liveTime.textContent = "00:00:00";
@@ -250,6 +255,42 @@ function renderLive(snapshot) {
       Math.floor((snapshot.nowTs - snapshot.active.startedAt) / 1000),
     ),
   );
+}
+
+function renderCloud(snapshot) {
+  const cloud = snapshot.cloud || {};
+  const profile = cloud.profile || null;
+  const syncState = cloud.syncState || {};
+
+  const cloudUser = document.getElementById("cloudUser");
+  const cloudSyncStatus = document.getElementById("cloudSyncStatus");
+  const signInBtn = document.getElementById("googleSignIn");
+  const signOutBtn = document.getElementById("googleSignOut");
+  const deviceNameInput = document.getElementById("deviceNameInput");
+
+  if (
+    !cloudUser ||
+    !cloudSyncStatus ||
+    !signInBtn ||
+    !signOutBtn ||
+    !deviceNameInput
+  ) {
+    return;
+  }
+
+  cloudUser.textContent = profile
+    ? `Connecte: ${profile.email || profile.name || profile.uid}`
+    : "Non connecte";
+
+  const lastSyncText = cloud.lastSyncAt
+    ? `Derniere sync: ${new Date(cloud.lastSyncAt).toLocaleString("fr-FR")}`
+    : "Derniere sync: jamais";
+  cloudSyncStatus.textContent = `${syncState.status || "idle"} | ${syncState.message || ""} | en attente: ${cloud.pendingDays || 0} | ${lastSyncText}`;
+
+  signInBtn.disabled = Boolean(profile);
+  signOutBtn.disabled = !profile;
+
+  deviceNameInput.value = cloud.deviceInfo?.deviceName || "";
 }
 
 function renderDayNavigation(snapshot) {
@@ -332,6 +373,7 @@ async function refreshUI() {
   await fetchSnapshot();
   renderTabs();
   renderLive(state.snapshot);
+  renderCloud(state.snapshot);
   renderDayNavigation(state.snapshot);
   renderRange(state.snapshot);
   renderSettings(state.snapshot);
@@ -440,6 +482,54 @@ function bindEvents() {
 
   document.getElementById("importCsv").addEventListener("click", async () => {
     await chrome.tabs.create({ url: chrome.runtime.getURL("import.html") });
+  });
+
+  document
+    .getElementById("googleSignIn")
+    .addEventListener("click", async () => {
+      const response = await chrome.runtime.sendMessage({
+        type: "googleSignIn",
+      });
+      if (!response?.ok) {
+        alert(
+          `Connexion Google impossible: ${response?.error || "erreur inconnue"}`,
+        );
+        return;
+      }
+
+      if (response.needsDeviceName) {
+        const name = prompt("Nom de cet appareil (ex: Laptop Alou):", "");
+        if (name && name.trim()) {
+          await chrome.runtime.sendMessage({
+            type: "setDeviceName",
+            deviceName: name.trim(),
+          });
+        }
+      }
+
+      await refreshUI();
+    });
+
+  document
+    .getElementById("googleSignOut")
+    .addEventListener("click", async () => {
+      await chrome.runtime.sendMessage({ type: "googleSignOut" });
+      await refreshUI();
+    });
+
+  document
+    .getElementById("saveDeviceName")
+    .addEventListener("click", async () => {
+      const deviceName = document
+        .getElementById("deviceNameInput")
+        .value.trim();
+      await chrome.runtime.sendMessage({ type: "setDeviceName", deviceName });
+      await refreshUI();
+    });
+
+  document.getElementById("syncNow").addEventListener("click", async () => {
+    await chrome.runtime.sendMessage({ type: "syncNow" });
+    await refreshUI();
   });
 
   document

@@ -10,7 +10,7 @@
 
 <body>
   <main class="app">
-    <header class="hero">
+    <!-- <header class="hero">
       <p class="kicker">Web Focus Tracker</p>
       <h1>Ton temps de navigation, clairement</h1>
       <div class="live-pill">
@@ -20,7 +20,7 @@
         </span>
         <strong id="liveTime">00:00:00</strong>
       </div>
-    </header>
+    </header> -->
 
     <section class="panel tabs-panel">
       <div class="tabs" role="tablist" aria-label="Periodes">
@@ -61,6 +61,20 @@
     </section>
 
     <section class="panel actions-panel">
+      <div class="cloud-box">
+        <p id="cloudUser" class="cloud-user">Non connecte</p>
+        <p id="cloudSyncStatus" class="cloud-status">Sync inactive</p>
+        <div class="cloud-actions">
+          <button id="googleSignIn" class="btn">Connexion Google</button>
+          <button id="googleSignOut" class="btn" disabled>Deconnexion</button>
+          <button id="syncNow" class="btn">Sync maintenant</button>
+        </div>
+        <div class="device-row">
+          <input id="deviceNameInput" type="text" placeholder="Nom de cet appareil (ex: Laptop Alou)" />
+          <button id="saveDeviceName" class="btn">Enregistrer</button>
+        </div>
+      </div>
+
       <div class="settings-grid">
         <label>
           <span>Idle stop (sec)</span>
