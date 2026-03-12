@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "Web Focus Tracker",
+  "version": "2.0.0",
+  "description": "Track time spent on websites with day, average and all-time insights.",
+  "permissions": ["tabs", "storage", "alarms", "idle"],
+  "host_permissions": ["http://*/*", "https://*/*"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Time Tracker"
+  }
+}
