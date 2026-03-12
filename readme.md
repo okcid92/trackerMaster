@@ -54,8 +54,8 @@ Extension Chrome de suivi du temps passe sur les sites internet, inspiree des lo
 - Une ligne par domaine, avec le nombre de secondes par jour.
 - A l'import:
   - L'import se fait dans un onglet dedie (evite la fermeture du popup Chrome pendant le choix du fichier).
-  - `OK` dans la confirmation = fusion avec les donnees existantes.
-  - `Annuler` = remplacement complet des donnees existantes.
+  - `Fusionner` = ajoute les donnees importees aux donnees existantes.
+  - `Remplacer` = remplace completement les donnees existantes.
 
 ## Donnees et vie privee
 
