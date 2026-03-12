@@ -148,6 +148,10 @@ function paletteColor(index) {
   return `hsl(${hue} 78% 46%)`;
 }
 
+function getFaviconUrl(domain) {
+  return `https://www.google.com/s2/favicons?domain=${encodeURIComponent(domain)}&sz=32`;
+}
+
 function buildConicGradient(domains) {
   if (!domains.length) {
     return "conic-gradient(#cbd5e1 0turn, #cbd5e1 1turn)";
@@ -193,12 +197,21 @@ function renderTable(domains) {
     const nameTd = document.createElement("td");
     const wrap = document.createElement("span");
     wrap.className = "domain-name";
+    const favicon = document.createElement("img");
+    favicon.className = "domain-favicon";
+    favicon.alt = "";
+    favicon.src = getFaviconUrl(domain.name);
     const dot = document.createElement("span");
     dot.className = "domain-dot";
     dot.style.background = domain.color;
+    dot.hidden = true;
+    favicon.addEventListener("error", () => {
+      favicon.hidden = true;
+      dot.hidden = false;
+    });
     const label = document.createElement("span");
     label.textContent = domain.name;
-    wrap.append(dot, label);
+    wrap.append(favicon, dot, label);
     nameTd.appendChild(wrap);
 
     const pctTd = document.createElement("td");
@@ -215,14 +228,22 @@ function renderTable(domains) {
 function renderLive(snapshot) {
   const liveSite = document.getElementById("liveSite");
   const liveTime = document.getElementById("liveTime");
+  const liveFavicon = document.getElementById("liveFavicon");
 
   if (!snapshot.active) {
     liveSite.textContent = "Aucun site actif";
     liveTime.textContent = "00:00:00";
+    liveFavicon.hidden = true;
+    liveFavicon.removeAttribute("src");
     return;
   }
 
   liveSite.textContent = snapshot.active.domain;
+  liveFavicon.hidden = false;
+  liveFavicon.src = getFaviconUrl(snapshot.active.domain);
+  liveFavicon.onerror = () => {
+    liveFavicon.hidden = true;
+  };
   liveTime.textContent = formatDuration(
     Math.max(
       0,

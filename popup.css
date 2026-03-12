@@ -76,6 +76,21 @@ body {
   font-size: 12px;
 }
 
+.live-site-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.live-favicon {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.25);
+  flex: 0 0 auto;
+}
+
 #liveSite {
   max-width: 200px;
   white-space: nowrap;
@@ -243,6 +258,15 @@ th:nth-child(3) {
   width: 9px;
   height: 9px;
   border-radius: 50%;
+}
+
+.domain-favicon {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  background: #e2e8f0;
+  border: 1px solid #d8dee8;
+  flex: 0 0 auto;
 }
 
 .empty {
